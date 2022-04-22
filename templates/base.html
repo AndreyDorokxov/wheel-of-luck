@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Square+Peg&display=swap" rel="stylesheet">
+	<title>Document</title>
+</head>
+<body>
+	<div class="header">
+		<div class="sign-wrap-2">
+    		<a href="#default"class="sign_word" >TLUCK</a>
+		</div>
+	  	
+	  	<div class="header-right">
+		    <a href="#contact"><img src="{{ url_for('static', filename='img/1.jpeg') }}" class="a_prof bright_it" alt="ERROR"></a>
+		    <a href="#about" class="bright_it">выйти</a>
+	  	</div>
+	</div>
+
+	{%block content%}{%endblock%}
+	<div id="mySidenav" class="sidenav">
+	  <a href="#" id="about">About</a>
+	  <a href="#" id="vk">VK</a>
+	  <a href="https://ton.place/id163172?ref=27d64" id="tonplace">TonPlace referal</a>
+
+	</div>
+</body>
+</html>
