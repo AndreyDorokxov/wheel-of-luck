@@ -1,0 +1,159 @@
+body{
+	background-color: #0C0032;
+}
+
+/* навигация */
+/* Стили ссылок в системе навигации */
+#mySidenav a {
+  position: fixed;
+  position: absolute; /* Позиция относительно окна браузера */
+  transition: 0.3s; /* Добавляем трансформацию при наведении */
+  padding: 15px; /* Отступы 15px */
+  width: 120px; /* Задаем ширину */
+  text-decoration: none; /* Убираем подчеркивание */
+
+  font-size: 14px; /* Размер шрифта */
+  color: color:  #190061;; /* Белый цвет текста */
+  border-radius: 0 5px 5px 0; /* Закругленные углы в верхней и нижней части справа */
+}
+
+#mySidenav a:hover {
+  left: 0;
+}
+
+#tonplace {
+  bottom: 20px;
+  background-color: #E5BE01;
+  left: -110px; /* Позиция на экране */
+}
+
+#vk {
+  bottom: 80px;
+  background-color: #FAD201;
+  left: -120px; /* Позиция на экране */
+}
+
+#about{
+  bottom: 140px;
+  background-color: #F7F21A;
+  left: -130px; /* Позиция на экране */
+}
+
+#vk_2{
+	display: none;
+}
+
+/* Шапка */
+.bright_it {
+	transition: 0.2s linear;
+}
+.bright_it:hover{
+	filter: brightness(60%)
+}
+.header {
+  overflow: hidden;
+  background-color: black;
+  padding: 20px 10px;
+  border-radius: 12px;
+}
+
+.header a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+.a_prof{
+	 border-radius: 100px;
+	 width: 30px;
+	 height: 30px;
+}
+
+
+
+
+.header a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+
+.header-right {
+  float: right;
+}
+
+/* Neontext */
+.sign-wrap-2 {
+    text-align: center;
+    padding: 20px 10px;
+}
+.sign-wrap-2 .sign_word {
+    font-size: 60px;
+  	font-weight: bold;
+  	font-family: 'Square Peg', cursive;
+    line-height: 15px;
+    color: #FFF;
+    text-transform: uppercase;
+    animation: 2s neon-2 alternate-reverse infinite;
+
+   }
+@keyframes neon-2 {
+    from {
+        text-shadow: 0 0 5px #3500D3,
+        0 0 10px #3500D3,
+        0 0 15px #3500D3,
+        0 0 20px #3500D3;
+    }
+    to {
+        text-shadow: 0 0 20px #3500D3,
+        0 0 35px #3500D3,
+        0 0 40px #3500D3,
+        0 0 50px #3500D3,
+        0 0 500px #3500D3;
+    }
+}   
+/* подстройка под разрешение */
+@media screen and (max-width: 650px) {
+  .header a {
+    float: none;
+    display: block;
+    text-align: left;
+
+  }
+
+.header-right{
+	vertical-align: text-top;
+}
+#about {
+  display: none;
+}
+
+#about {
+  display: none;
+}
+
+#vk {
+  display: none;
+}
+
+#tiktok {
+  display: none;
+}
+#vk_2{
+	display: block;
+	bottom: 20px;
+	left: 0;
+}
+#vk_2 img{
+	width: 50px;
+	height: 50px;
+	border-radius: 60px;
+}
+}
+
+
