@@ -1,11 +1,14 @@
 from flask import Flask, url_for, redirect, request, render_template
-from donationalerts.asyncio_api import DonationAlertsAPI, Centrifugo
-from donationalerts.constants import Scopes, Channels
+from donationalerts import Alert
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
-api = DonationAlertsAPI("9429", "DqARHFdlNjLIlwa5YSYlXhfWySMzqhRWVZwP9ipX", "http://127.0.0.1:5000/login",
-                        Scopes.ALL_SCOPES)
+alert = Alert("FF5mQgAfAvC16OyVLthn")
+
+
+@alert.event()
+def handler(event):
+    print(event.message)
 
 
 @app.route("/")
@@ -26,22 +29,6 @@ def signup():
 @app.route("/profile/<id>")
 def profile(id, name):
     return render_template("profile.html", name=name)
-
-
-@app.route("/", methods=["GET"])
-def index():
-    return redirect(api.login())
-
-
-@app.route("/login", methods=["GET"])
-async def login():
-    code = request.args.get("code")
-    access_token = await api.get_access_token(code)
-    user = await api.user(access_token)
-
-    fugo = Centrifugo(user.socket_connection_token, access_token, user.id)
-    event = await fugo.subscribe(Channels.NEW_DONATION_ALERTS)
-    return event.objects
 
 
 if __name__ == "__main__":
