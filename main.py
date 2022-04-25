@@ -27,14 +27,20 @@ def index():
 
 @app.route("/quit")
 def quit():
+    log = session.get('log', False)
+    if not log:
+        session["log"] = log
     session.pop("email")
     session["log"] = False
     return redirect("/")
 @app.route("/signin", methods=['GET','POST'])
 def signin():
     log = session.get('log', False)
+    if not log:
+        session["log"] = log
     if session["log"]:
         return redirect("/")
+
     form = LoginForm()
     db_sess = db_session.create_session()
     if form.validate_on_submit():
@@ -76,6 +82,9 @@ def signup():
 
 @app.route("/profile")
 def profile():
+    log = session.get('log', False)
+    if not log:
+        session["log"] = log
     if session["log"]:
         return render_template("profile.html", name=session.email, USER_IN=session["log"])
     return redirect("/signin")
