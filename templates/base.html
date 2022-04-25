@@ -7,6 +7,8 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Square+Peg&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;500&display=swap" rel="stylesheet">
 	<title>Document</title>
 </head>
 <body>
@@ -14,10 +16,15 @@
 		<div class="sign-wrap-2">
     		<a href="#default"class="sign_word" >TLUCK</a>
 		</div>
-	  	
+
 	  	<div class="header-right">
-		    <a href="#contact"><img src="{{ url_for('static', filename='img/1.jpeg') }}" class="a_prof bright_it" alt="ERROR"></a>
-		    <a href="#about" class="bright_it">выйти</a>
+		    {%if USER_IN%}
+				<a href='/profile'><img src="{{ url_for('static', filename='img/1.png') }}" class="a_prof bright_it" alt="ERROR"></a>
+				<a href="/quit" class="bright_it">Выйти</a>
+			{%else%}
+				<a href="/signin" class="bright_it">Войти</a>
+				<a href="/signup" class="bright_it">Регистрация</a>
+			{%endif%}
 	  	</div>
 	</div>
 
@@ -26,7 +33,7 @@
 	  <a href="#" id="about">About</a>
 	  <a href="#" id="vk">VK</a>
 	  <a href="https://ton.place/id163172?ref=27d64" id="tonplace">TonPlace referal</a>
-
+		<a href="#" id="vk_2"><img src="{{ url_for('static', filename='img/logo_vk.png') }}"  alt="ERROR"></a>
 	</div>
 </body>
 </html>

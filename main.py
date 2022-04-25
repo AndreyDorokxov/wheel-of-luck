@@ -4,12 +4,18 @@ from data.users import *
 from data import db_session
 from flask import session
 import datetime
+from donationalerts import Alert
 from VARS import *
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
+alert = Alert("FF5mQgAfAvC16OyVLthn")
+@alert.event()
+def handler(event):
+    print(event.message)
+    
 @app.route("/")
 def index():
     print(session["log"])
@@ -77,3 +83,4 @@ def profile():
 if __name__ == "__main__":
     db_session.global_init("db/base.db")
     app.run(port=8080, host='127.0.0.1')
+1
