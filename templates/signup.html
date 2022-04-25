@@ -12,7 +12,52 @@
 <body>
 	{% extends "base.html" %}
 	{%block content%}
+	<div class="container">
+		<form action="" method="post">
+			{{form.hidden_tag()}}
+			<div class="row">
+				<div class="col-75">
+					<p>Регистрация</p>
+				</div>
+			</div>
 
+			
+			<div class="row">
+				<div class="col-25">
+				{{form.email.title}}
+				</div>
+				<div class="col-75">
+				{{form.email(type="email")}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-25">
+				{{form.password.title}}
+				</div>
+				<div class="col-75">
+				{{form.password(type="password")}}
+				</div>
+				
+				
+			</div>
+			<div class="row">
+				<div class="col-25">
+				{{form.password_2.title}}
+				</div>
+				<div class="col-75">
+				{{form.password_2(type="password")}}
+				</div>
+				
+				
+			</div>
+			<div class="row">
+			{{ form.submit(type="submit") }}
+			</div>
+			<div class="row">
+			{{message}}
+		</div>
+		</form>
+	</div>
 	{%endblock%}
 </body>
 </html>

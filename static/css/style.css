@@ -133,7 +133,7 @@ body{
   display: none;
 }
 
-#about {
+#tonplace {
   display: none;
 }
 
@@ -156,4 +156,88 @@ body{
 }
 }
 
+/* формы */
 
+/* Стили метки, расположенной рядом с полем ввода */
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+/* Стили кнопки отправки данных */
+input[type=submit] {
+  background-color: #3500D3;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+  transition: 0.2s linear;
+}
+input[type=submit]:hover {
+  filter: brightness(60%)
+}
+input[type=text], [type=email], [type=password]{
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+/* Стили контейнера */
+.container {
+  width:50%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+  background-color: #240090;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+/* Обтекающая колонка для меток: 25% ширины */
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+  padding:10px;
+}
+
+/* Обтекающая колонка для полей ввода: 75% ширины */
+.col-75 {
+  float: left;
+  width: 90%;
+  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+  margin-top: 6px;
+  padding:10px;
+  border-radius:10px;
+
+}
+.col-75 p{
+font-size:30px;
+line-height: 25px;
+border-radius: 4px;
+color:white;
+text-align:center;
+font-family: 'Oswald', sans-serif;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Адаптивная разметка — когда ширина экрана становится меньше 600px,
+делаем так, чтобы две колонки складывались друг над другом, а не рядом
+друг с другом */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
