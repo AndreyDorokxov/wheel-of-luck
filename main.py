@@ -15,7 +15,7 @@ alert = Alert("FF5mQgAfAvC16OyVLthn")
 @alert.event()
 def handler(event):
     print(event.message)
-    
+
 @app.route("/")
 def index():
     print(session["log"])
