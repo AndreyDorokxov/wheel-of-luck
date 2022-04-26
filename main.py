@@ -77,7 +77,7 @@ def signup():
     return render_template("signup.html", form=form, USER_IN=session["log"])
 
 
-@app.route("/profile")
+@app.route("/profile", methods=['GET','POST'])
 def profile():
     log = session.get('log', False)
     if not log:
