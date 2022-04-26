@@ -4,17 +4,14 @@ from data.users import *
 from data import db_session
 from flask import session
 import datetime
-from donationalerts import Alert
+
 from VARS import *
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
-alert = Alert("FF5mQgAfAvC16OyVLthn")
-@alert.event()
-def handler(event):
-    print(event.message)
+
 
 @app.route("/")
 def index():
@@ -86,7 +83,26 @@ def profile():
     if not log:
         session["log"] = log
     if session["log"]:
-        return render_template("profile.html", name=session.email, USER_IN=session["log"])
+        form = ProfileForm()
+        toker = session.get('token', None)
+        sums = session.get('sum', None)
+        codee = session.get('codes', None)
+        if sums is None:
+            session["sum"] = None
+        if toker is None:
+            session["token"] = None
+        if codee is None:
+            session["codes"] = None
+        if form.validate_on_submit():
+            session["token"] = form.tokens.data
+            session["sum"] = form.sumer.data
+            session["codes"] = f"{form.codeword1.data},{form.codeword2.data},{form.codeword3.data}"
+        if codee is None and toker is None and sums is None:
+            return render_template("profile.html", name=session["email"], form=form,
+                                   sum=0, none=None,USER_IN=session["log"])
+        return render_template("profile.html", name=session["email"], form=form, token=session["token"],
+                               sum=session["sum"], code=session["codes"], none=None,USER_IN=session["log"])
+
     return redirect("/signin")
 
 if __name__ == "__main__":

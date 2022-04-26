@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="{{ url_for("static", filename="css/style.css") }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename="css/style.css") }}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Square+Peg&display=swap" rel="stylesheet">
@@ -12,7 +12,61 @@
 <body>
 	{% extends "base.html" %}
 	{%block content%}
+	<div class="container">
+		<div class="pp">
+		<p>login:{{name}}</p>
+		<p>Токен:{{token}}</p>
+		<p>Ключевые слова:{{code}}</p>
+		<p>1 очко к {{sum}} р</p>
+		</div>
+		<form action="" method="post">
+			{{form.hidden_tag()}}
+			<div class="row">
+				<div class="col-75">
+					<p>Настройки колеса</p>
+				</div>
+			</div>
 
+			
+			<div class="row">
+				<div class="col-75">
+				{{form.tokens(type="text",placeholder="Токен DonatAlert")}}
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="col-75">
+				{{form.sumer(type="text",placeholder="сумма(вводите сами) = 1 очко")}}
+				</div>
+				
+				
+			</div>
+			<div class="row">
+
+				<div class="col-75">
+				{{form.codeword1(type="text",placeholder="кодовое слово 1")}}
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="col-75">
+				{{form.codeword2(type="text",placeholder="кодовое слово 2")}}
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="col-75">
+				{{form.codeword3(type="text",placeholder="кодовое слово 2")}}
+				</div>
+			</div>
+			<div class="row">
+			{{ form.submit(type="submit") }}
+			</div>
+			<div class="row">
+			{{message}}
+		</div>
+		</form>
+	</div>
 	{%endblock%}
 </body>
 </html>
