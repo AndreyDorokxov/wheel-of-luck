@@ -6,6 +6,7 @@ from flask import session
 import datetime
 
 from VARS import *
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
@@ -22,6 +23,7 @@ def index():
 
     return render_template("index.html", USER_IN=session["log"])
 
+
 @app.route("/quit")
 def quit():
     log = session.get('log', False)
@@ -30,7 +32,9 @@ def quit():
     session.pop("email")
     session["log"] = False
     return redirect("/")
-@app.route("/signin", methods=['GET','POST'])
+
+
+@app.route("/signin", methods=['GET', 'POST'])
 def signin():
     log = session.get('log', False)
     if not log:
@@ -41,15 +45,16 @@ def signin():
     form = LoginForm()
     db_sess = db_session.create_session()
     if form.validate_on_submit():
-        user = db_sess.query(User).filter(User.email==form.email.data).first()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user.check_password(form.password.data):
             em = session.get('email', user.email)
             session["email"] = user.email
             session["log"] = True
             return redirect('/')
-    return render_template("signin.html", form=form, USER_IN=session["log"] )
+    return render_template("signin.html", form=form, USER_IN=session["log"])
 
-@app.route("/signup", methods=['GET','POST'])
+
+@app.route("/signup", methods=['GET', 'POST'])
 def signup():
     log = session.get('log', False)
     if not log:
@@ -99,11 +104,12 @@ def profile():
             session["codes"] = f"{form.codeword1.data},{form.codeword2.data},{form.codeword3.data}"
         if codee is None and toker is None and sums is None:
             return render_template("profile.html", name=session["email"], form=form,
-                                   sum=0, none=None,USER_IN=session["log"])
+                                   sum=0, none=None, USER_IN=session["log"])
         return render_template("profile.html", name=session["email"], form=form, token=session["token"],
-                               sum=session["sum"], code=session["codes"], none=None,USER_IN=session["log"])
+                               sum=session["sum"], code=session["codes"], none=None, USER_IN=session["log"])
 
     return redirect("/signin")
+
 
 if __name__ == "__main__":
     db_session.global_init("db/base.db")
