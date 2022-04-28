@@ -1,25 +1,24 @@
 from flask import Flask, url_for, redirect, request, render_template
 from forms import *
+from wheel_logic import *
 from data.users import *
 from data import db_session
 from flask import session
 import datetime
 
 from VARS import *
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
 
-
+message_i = 0
 @app.route("/")
 def index():
     loged()
-
-    return render_template("index.html", USER_IN=session["log"])
-
+    wheel = Wheel(message_i)
+    return render_template("index.html", USER_IN=session["log"],code=session["codes"], chance=wheel.calculate())
 
 @app.route("/quit")
 def quit():
@@ -29,12 +28,7 @@ def quit():
     session["log"] = False
     return redirect("/")
 
-<<<<<<< HEAD
 @app.route("/signin", methods=['GET','POST'])
-=======
-
-@app.route("/signin", methods=['GET', 'POST'])
->>>>>>> 9d943d62984a2a0fb25a001b32f767bab299799a
 def signin():
     loged()
 
@@ -45,26 +39,17 @@ def signin():
     db_sess = db_session.create_session()
 
     if form.validate_on_submit():
-<<<<<<< HEAD
         user = db_sess.query(User).filter(User.email==form.email.data).first()
 
-=======
-        user = db_sess.query(User).filter(User.email == form.email.data).first()
->>>>>>> 9d943d62984a2a0fb25a001b32f767bab299799a
         if user.check_password(form.password.data):
             em = session.get('email', user.email)
             session["email"] = user.email
             session["log"] = True
             return redirect('/')
-<<<<<<< HEAD
 
     return render_template("signin.html", form=form, USER_IN=session["log"] )
-=======
-    return render_template("signin.html", form=form, USER_IN=session["log"])
->>>>>>> 9d943d62984a2a0fb25a001b32f767bab299799a
 
-
-@app.route("/signup", methods=['GET', 'POST'])
+@app.route("/signup", methods=['GET','POST'])
 def signup():
     loged()
 
@@ -108,41 +93,37 @@ def profile():
         sums = session.get('sum', None)
         codee = session.get('codes', None)
 
-        if sums is None:
-            session["sum"] = None
-
-        if toker is None:
-            session["token"] = None
-
-        if codee is None:
-            session["codes"] = None
-
         if form.validate_on_submit():
             session["token"] = form.tokens.data
             session["sum"] = form.sumer.data
-            session["codes"] = f"{form.codeword1.data},{form.codeword2.data},{form.codeword3.data}"
+            session["codes"] = [form.codeword1.data,form.codeword2.data,form.codeword3.data]
 
         if codee is None and toker is None and sums is None:
             return render_template("profile.html", name=session["email"], form=form,
-<<<<<<< HEAD
                                    sum=0, none=None,USER_IN=session["log"])
 
-=======
-                                   sum=0, none=None, USER_IN=session["log"])
->>>>>>> 9d943d62984a2a0fb25a001b32f767bab299799a
         return render_template("profile.html", name=session["email"], form=form, token=session["token"],
-                               sum=session["sum"], code=session["codes"], none=None, USER_IN=session["log"])
+                               sum=session["sum"], code=session["codes"], none=None,USER_IN=session["log"])
 
     return redirect("/signin")
 
-<<<<<<< HEAD
 def loged():
     log = session.get('log', False)
     if not log:
         session["log"] = log
-=======
+    toker = session.get('token', None)
+    sums = session.get('sum', None)
+    codee = session.get('codes', None)
 
->>>>>>> 9d943d62984a2a0fb25a001b32f767bab299799a
+    if sums is None:
+        session["sum"] = None
+
+    if toker is None:
+        session["token"] = None
+
+    if codee is None:
+        session["codes"] = None
+
 if __name__ == "__main__":
     db_session.global_init("db/base.db")
     app.run(port=8080, host='127.0.0.1')
