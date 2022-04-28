@@ -4,6 +4,7 @@ from wheel_logic import *
 from data.users import *
 from data import db_session
 from flask import session
+from donationalerts import Alert
 import datetime
 
 from VARS import *
@@ -12,12 +13,14 @@ app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
-
-message_i = 0
+alert = Alert(session["token"])
+@alert.event()
+def mes(event):
+    return event.message
 @app.route("/")
 def index():
     loged()
-    wheel = Wheel(message_i)
+    wheel = Wheel(mes())
     return render_template("index.html", USER_IN=session["log"],code=session["codes"], chance=wheel.calculate())
 
 @app.route("/quit")

@@ -25,21 +25,21 @@ body{
   position: fixed;
   bottom: 20px;
   background-color: #E5BE01;
-  left: -110px; /* Позиция на экране */
+  left: -90px; /* Позиция на экране */
 }
 
 #vk {
   position: fixed;
   bottom: 80px;
   background-color: #FAD201;
-  left: -120px; /* Позиция на экране */
+  left: -100px; /* Позиция на экране */
 }
 
 #about{
   position: fixed;
   bottom: 140px;
   background-color: #F7F21A;
-  left: -130px; /* Позиция на экране */
+  left: -110px; /* Позиция на экране */
 }
 
 #vk_2{
