@@ -1,7 +1,11 @@
 body{
 	background-color: #0C0032;
 }
-
+.none_trues{
+    font-size:100px;
+    position:center;
+    align:center;
+}
 /* навигация */
 /* Стили ссылок в системе навигации */
 #mySidenav a {
@@ -23,21 +27,21 @@ body{
 
 #tonplace {
   position: fixed;
-  bottom: 20px;
+  bottom: 10px;
   background-color: #E5BE01;
   left: -90px; /* Позиция на экране */
 }
 
 #vk {
   position: fixed;
-  bottom: 80px;
+  bottom: 90px;
   background-color: #FAD201;
   left: -100px; /* Позиция на экране */
 }
 
 #about{
   position: fixed;
-  bottom: 140px;
+  bottom: 150px;
   background-color: #F7F21A;
   left: -110px; /* Позиция на экране */
 }
@@ -300,7 +304,7 @@ font-family: 'Oswald', sans-serif;
 
 
 .deal-wheel {
-  --size: clamp(250px, 80vmin, 700px);
+  --size: clamp(250px, 80vmin, 380px);
   --lg-hs: 0 3%;
   --lg-stop: 50%;
   --lg: linear-gradient(

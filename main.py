@@ -5,23 +5,41 @@ from data.users import *
 from data import db_session
 from flask import session
 from donationalerts import Alert
+import json
 import datetime
-
-from VARS import *
+import VARS
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
-alert = Alert(session["token"])
+token = "mr3zXylLxqLrj0xWeJSk"
+alert = Alert("mr3zXylLxqLrj0xWeJSk")
+# функция с донат алертом
 @alert.event()
-def mes(event):
-    return event.message
+def handler(event):
+    print(VARS.event_codes)
+    if not VARS.event_codes is None:
+        a1 = event.message
+        a2 = event.amount
+        n = 0
+
+        for i in VARS.event_codes:
+            if str(a1) == str(i):
+                VARS.event_list[n] += float(a2)
+            n += 1
+        print(VARS.event_list)
 @app.route("/")
 def index():
     loged()
-    wheel = Wheel(mes())
-    return render_template("index.html", USER_IN=session["log"],code=session["codes"], chance=wheel.calculate())
+    if session["eventer"] is None:
+        return render_template("index.html", USER_IN=session["log"],  trues=session["eventer"], none=None)
+    else:
+        session["eventer"] = VARS.event_list
+        print(VARS.event_list)
+        wheel = Wheel(session["eventer"])
+        return render_template("index.html", USER_IN=session["log"], code=session["codes"], events=wheel.calculate(), trues=session["eventer"], none=None)
+
 
 @app.route("/quit")
 def quit():
@@ -31,7 +49,8 @@ def quit():
     session["log"] = False
     return redirect("/")
 
-@app.route("/signin", methods=['GET','POST'])
+
+@app.route("/signin", methods=['GET', 'POST'])
 def signin():
     loged()
 
@@ -42,17 +61,21 @@ def signin():
     db_sess = db_session.create_session()
 
     if form.validate_on_submit():
-        user = db_sess.query(User).filter(User.email==form.email.data).first()
+        user = db_sess.query(User).filter(
+            User.email == form.email.data).first()
+        if user.email == form.email.data:
+            if user.check_password(form.password.data):
+                em = session.get('email', user.email)
+                session["email"] = user.email
+                session["log"] = True
+                return redirect('/')
+            else:
+                return redirect('/signin')
 
-        if user.check_password(form.password.data):
-            em = session.get('email', user.email)
-            session["email"] = user.email
-            session["log"] = True
-            return redirect('/')
+    return render_template("signin.html", form=form, USER_IN=session["log"])
 
-    return render_template("signin.html", form=form, USER_IN=session["log"] )
 
-@app.route("/signup", methods=['GET','POST'])
+@app.route("/signup", methods=['GET', 'POST'])
 def signup():
     loged()
 
@@ -75,9 +98,10 @@ def signup():
                                    form=form,
                                    message="Такой пользователь уже есть", USER_IN=session["log"])
         user = User(
-            email=form.email.data
+            email=form.email.data,
         )
         user.set_password(form.password.data)
+
         db_sess.add(user)
         db_sess.commit()
 
@@ -86,38 +110,37 @@ def signup():
     return render_template("signup.html", form=form, USER_IN=session["log"])
 
 
-@app.route("/profile", methods=['GET','POST'])
+@app.route("/profile", methods=['GET', 'POST'])
 def profile():
     loged()
-
     if session["log"]:
         form = ProfileForm()
-        toker = session.get('token', None)
-        sums = session.get('sum', None)
-        codee = session.get('codes', None)
 
         if form.validate_on_submit():
-            session["token"] = form.tokens.data
+            VARS.token = form.tokens.data
+            session["token"] = VARS.token
             session["sum"] = form.sumer.data
-            session["codes"] = [form.codeword1.data,form.codeword2.data,form.codeword3.data]
-
-        if codee is None and toker is None and sums is None:
+            session["codes"] = [form.codeword1.data,
+                                form.codeword2.data, form.codeword3.data]
+        if session["codes"] is None and session["token"] is None and session["sum"] is None:
             return render_template("profile.html", name=session["email"], form=form,
-                                   sum=0, none=None,USER_IN=session["log"])
+                                   sum=0, none=None, USER_IN=session["log"])
 
         return render_template("profile.html", name=session["email"], form=form, token=session["token"],
-                               sum=session["sum"], code=session["codes"], none=None,USER_IN=session["log"])
+                               sum=session["sum"], code=session["codes"], none=None, USER_IN=session["log"])
 
     return redirect("/signin")
 
+# проверка session используется везде.
 def loged():
+    global codes, token
     log = session.get('log', False)
     if not log:
         session["log"] = log
     toker = session.get('token', None)
     sums = session.get('sum', None)
     codee = session.get('codes', None)
-
+    eventer = session.get('eventer', None)
     if sums is None:
         session["sum"] = None
 
@@ -126,8 +149,15 @@ def loged():
 
     if codee is None:
         session["codes"] = None
+    if eventer is None:
+        session["eventer"] = None
+    VARS.event_codes = session["codes"]
+    VARS.token = session["token"]
+    if VARS.n == 0:
+        VARS.event_list = session["eventer"]
+
+        VARS.n = 1
 
 if __name__ == "__main__":
     db_session.global_init("db/base.db")
     app.run(port=8080, host='127.0.0.1')
-1
