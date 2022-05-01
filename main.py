@@ -5,21 +5,23 @@ from data.users import *
 from data import db_session
 from flask import session
 from donationalerts import Alert
-import json
 import datetime
 import VARS
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
-token = "mr3zXylLxqLrj0xWeJSk"
-alert = Alert("mr3zXylLxqLrj0xWeJSk")
+
+alert = Alert("")
+
 # функция с донат алертом
+
 @alert.event()
 def handler(event):
-    print(VARS.event_codes)
-    if not VARS.event_codes is None:
+
+    if not(VARS.event_codes is None):
         a1 = event.message
         a2 = event.amount
         n = 0
@@ -29,6 +31,8 @@ def handler(event):
                 VARS.event_list[n] += float(a2)
             n += 1
         print(VARS.event_list)
+
+
 @app.route("/")
 def index():
     loged()
@@ -38,11 +42,12 @@ def index():
         session["eventer"] = VARS.event_list
         print(VARS.event_list)
         wheel = Wheel(session["eventer"])
-        return render_template("index.html", USER_IN=session["log"], code=session["codes"], events=wheel.calculate(), trues=session["eventer"], none=None)
+        return render_template("index.html", USER_IN=session["log"], code=session["codes"], events=wheel.calculate(),
+                               trues=session["eventer"], none=None)
 
 
 @app.route("/quit")
-def quit():
+def quiter():
     loged()
 
     session.pop("email")
@@ -122,6 +127,7 @@ def profile():
             session["sum"] = form.sumer.data
             session["codes"] = [form.codeword1.data,
                                 form.codeword2.data, form.codeword3.data]
+            session["eventer"] = [1.0, 1.0, 1.0]
         if session["codes"] is None and session["token"] is None and session["sum"] is None:
             return render_template("profile.html", name=session["email"], form=form,
                                    sum=0, none=None, USER_IN=session["log"])
@@ -132,15 +138,18 @@ def profile():
     return redirect("/signin")
 
 # проверка session используется везде.
+
+
 def loged():
-    global codes, token
     log = session.get('log', False)
     if not log:
         session["log"] = log
+
     toker = session.get('token', None)
     sums = session.get('sum', None)
     codee = session.get('codes', None)
     eventer = session.get('eventer', None)
+
     if sums is None:
         session["sum"] = None
 
@@ -149,14 +158,17 @@ def loged():
 
     if codee is None:
         session["codes"] = None
+
     if eventer is None:
         session["eventer"] = None
+
     VARS.event_codes = session["codes"]
     VARS.token = session["token"]
+
     if VARS.n == 0:
         VARS.event_list = session["eventer"]
-
         VARS.n = 1
+
 
 if __name__ == "__main__":
     db_session.global_init("db/base.db")

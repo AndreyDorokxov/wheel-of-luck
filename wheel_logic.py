@@ -4,6 +4,7 @@ class Wheel:
         self.summ = 0
 
         self.end_voc = []
+
     def calculate(self):
         for i in self.value:
             self.summ += i
