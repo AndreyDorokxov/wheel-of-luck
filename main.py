@@ -4,10 +4,9 @@ from wheel_logic import *
 from data.users import *
 from data import db_session
 from flask import session
-from donationalerts import Alert
 import datetime
 import VARS
-
+from donationalerts import Alert
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
@@ -16,11 +15,10 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
 
 alert = Alert("")
 
-# функция с донат алертом
 
+# функция с донат алертом
 @alert.event()
 def handler(event):
-
     if not(VARS.event_codes is None):
         a1 = event.message
         a2 = event.amount
@@ -30,17 +28,21 @@ def handler(event):
             if str(a1) == str(i):
                 VARS.event_list[n] += float(a2)
             n += 1
-        print(VARS.event_list)
 
 
 @app.route("/")
 def index():
+    global alert
     loged()
+    print(alert.token)
+    print(VARS.event_list)
+    print(VARS.event_codes)
+    print(VARS.token)
+    print(VARS.n)
     if session["eventer"] is None:
         return render_template("index.html", USER_IN=session["log"],  trues=session["eventer"], none=None)
     else:
         session["eventer"] = VARS.event_list
-        print(VARS.event_list)
         wheel = Wheel(session["eventer"])
         return render_template("index.html", USER_IN=session["log"], code=session["codes"], events=wheel.calculate(),
                                trues=session["eventer"], none=None)
@@ -128,6 +130,8 @@ def profile():
             session["codes"] = [form.codeword1.data,
                                 form.codeword2.data, form.codeword3.data]
             session["eventer"] = [1.0, 1.0, 1.0]
+            global alert
+            alert.token = session["token"]
         if session["codes"] is None and session["token"] is None and session["sum"] is None:
             return render_template("profile.html", name=session["email"], form=form,
                                    sum=0, none=None, USER_IN=session["log"])
@@ -141,6 +145,7 @@ def profile():
 
 
 def loged():
+
     log = session.get('log', False)
     if not log:
         session["log"] = log
@@ -165,9 +170,15 @@ def loged():
     VARS.event_codes = session["codes"]
     VARS.token = session["token"]
 
-    if VARS.n == 0:
+    if VARS.n == 0 and not session["eventer"] is None:
         VARS.event_list = session["eventer"]
+        VARS.token = session["token"]
+        VARS.event_codes = session["codes"]
         VARS.n = 1
+        global alert
+        alert.token = session["token"]
+
+
 
 
 if __name__ == "__main__":
