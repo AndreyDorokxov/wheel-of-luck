@@ -16,7 +16,6 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
 
 @app.route("/")
 def index():
-    global alert
     loged()
     print(VARS.event_list)
     print(VARS.event_codes)
@@ -141,10 +140,10 @@ def profile():
             VARS.n = 0
         if session["codes"] is None and session["token"] is None:
             return render_template("profile.html", name=session["email"], form=form,
-                                   sum=0, none=None, USER_IN=session["log"])
+                                    none=None, USER_IN=session["log"])
 
         return render_template("profile.html", name=session["email"], form=form, token=session["token"],
-                               sum=session["sum"], code=session["codes"], none=None, USER_IN=session["log"])
+                                code=session["codes"], none=None, USER_IN=session["log"])
 
     return redirect("/signin")
 
