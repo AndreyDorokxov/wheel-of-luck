@@ -13,7 +13,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
 
-
+# начало
 @app.route("/", methods=['GET', 'POST'])
 def index():
     loged()
