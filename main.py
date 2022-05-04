@@ -87,8 +87,9 @@ def signin():
                     return redirect('/')
                 else:
                     return redirect('/signin')
-        except Exception:
-            return redirect('/signin')
+        except AttributeError:
+            return render_template("signin.html", form=form, USER_IN=session["log"],
+                                   message='Такого логина или пароля не существует')
 
     return render_template("signin.html", form=form, USER_IN=session["log"])
 
