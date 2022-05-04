@@ -26,17 +26,17 @@
 				const prizes = [
 				  {
 					text: "{{code[0]}}({{chance[0]}}%)",
-					color: "hsl(320, 92%, 47%)",
+					color: '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase(),
 					chance: {{events[0]}}
 				  },
 				  {
 					text: "{{code[1]}}({{chance[1]}}%)",
-					color: "hsl(301, 92%, 47%)",
+					color: '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase(),
 					chance: {{events[1]}}
 				  },
 				  {
 					text: "{{code[2]}}({{chance[2]}}%)",
-					color: "hsl(303, 90%, 45%)",
+					color: '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase(),
 					chance: {{events[2]}}
 				  }
 				];

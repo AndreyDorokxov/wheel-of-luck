@@ -1,4 +1,5 @@
-from flask import Flask, url_for, redirect, request, render_template
+import socketio
+from flask import Flask, redirect, render_template
 from forms import *
 from wheel_logic import *
 from data.users import *
@@ -7,22 +8,21 @@ from flask import session
 import datetime
 import VARS
 from donationalerts import Alert
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
 
+
 # начало
 @app.route("/", methods=['GET', 'POST'])
 def index():
     loged()
-    print(VARS.event_list)
-    print(VARS.event_codes)
-    print(VARS.n)
 
     if session["eventer"] is None:
-        return render_template("index.html", USER_IN=session["log"],  trues=session["eventer"], none=None)
+        return render_template("index.html", USER_IN=session["log"], trues=session["eventer"], none=None)
     else:
         if VARS.n == 0:
             alert = Alert(session["token"])
@@ -38,8 +38,8 @@ def index():
                             if str(a1) == str(i):
                                 VARS.event_list[n] += float(a2)
                             n += 1
-            except Exception:
-                print(1)
+            except socketio.exceptions.ConnectionError:
+                pass
 
             VARS.n = 1
 
@@ -142,18 +142,18 @@ def profile():
             VARS.n = 0
         if session["codes"] is None and session["token"] is None:
             return render_template("profile.html", name=session["email"], form=form,
-                                    none=None, USER_IN=session["log"])
+                                   none=None, USER_IN=session["log"])
 
         return render_template("profile.html", name=session["email"], form=form, token=session["token"],
-                                code=session["codes"], none=None, USER_IN=session["log"])
+                               code=session["codes"], none=None, USER_IN=session["log"])
 
     return redirect("/signin")
+
 
 # проверка session используется везде.
 
 
 def loged():
-
     log = session.get('log', False)
     if not log:
         session["log"] = log
