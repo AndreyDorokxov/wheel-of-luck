@@ -139,7 +139,7 @@ def profile():
                                 form.codeword2.data, form.codeword3.data]
             session["eventer"] = [1.0, 1.0, 1.0]
             VARS.n = 0
-        if session["codes"] is None and session["token"] is None and session["sum"] is None:
+        if session["codes"] is None and session["token"] is None:
             return render_template("profile.html", name=session["email"], form=form,
                                    sum=0, none=None, USER_IN=session["log"])
 
