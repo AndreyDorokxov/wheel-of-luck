@@ -14,7 +14,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
 )
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     loged()
     print(VARS.event_list)
