@@ -85,7 +85,7 @@ def signin():
                     return redirect('/')
                 else:
                     return redirect('/signin')
-        except Exception:
+        except:
             return redirect('/signin')
 
     return render_template("signin.html", form=form, USER_IN=session["log"])
