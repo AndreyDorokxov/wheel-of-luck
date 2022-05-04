@@ -75,16 +75,19 @@ def signin():
     db_sess = db_session.create_session()
 
     if form.validate_on_submit():
-        user = db_sess.query(User).filter(
-            User.email == form.email.data).first()
-        if user.email == form.email.data:
-            if user.check_password(form.password.data):
-                em = session.get('email', user.email)
-                session["email"] = user.email
-                session["log"] = True
-                return redirect('/')
-            else:
-                return redirect('/signin')
+        try:
+            user = db_sess.query(User).filter(
+                User.email == form.email.data).first()
+            if user.email == form.email.data:
+                if user.check_password(form.password.data):
+                    em = session.get('email', user.email)
+                    session["email"] = user.email
+                    session["log"] = True
+                    return redirect('/')
+                else:
+                    return redirect('/signin')
+        except Exception:
+            return redirect('/signin')
 
     return render_template("signin.html", form=form, USER_IN=session["log"])
 
