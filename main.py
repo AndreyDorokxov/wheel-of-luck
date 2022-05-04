@@ -26,18 +26,20 @@ def index():
     else:
         if VARS.n == 0:
             alert = Alert(session["token"])
+            try:
+                @alert.event()
+                def handler(event):
+                    if not (VARS.event_codes is None):
+                        a1 = event.message
+                        a2 = event.amount
+                        n = 0
 
-            @alert.event()
-            def handler(event):
-                if not (VARS.event_codes is None):
-                    a1 = event.message
-                    a2 = event.amount
-                    n = 0
-
-                    for i in VARS.event_codes:
-                        if str(a1) == str(i):
-                            VARS.event_list[n] += float(a2)
-                        n += 1
+                        for i in VARS.event_codes:
+                            if str(a1) == str(i):
+                                VARS.event_list[n] += float(a2)
+                            n += 1
+            except Exception:
+                print(1)
 
             VARS.n = 1
 
@@ -85,7 +87,7 @@ def signin():
                     return redirect('/')
                 else:
                     return redirect('/signin')
-        except:
+        except Exception:
             return redirect('/signin')
 
     return render_template("signin.html", form=form, USER_IN=session["log"])
