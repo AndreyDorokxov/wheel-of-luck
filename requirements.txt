@@ -1,0 +1,7 @@
+donationalerts==1.0.1
+DonationAlertsAPI==2.0.2
+Flask==2.1.2
+Flask_WTF==1.0.1
+SQLAlchemy==1.4.36
+Werkzeug==2.1.2
+WTForms==3.0.1

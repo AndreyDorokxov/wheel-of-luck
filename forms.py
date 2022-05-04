@@ -9,10 +9,12 @@ class RegisterForm(FlaskForm):
     password_2 = PasswordField('Повторите пароль', validators=[DataRequired()])
     submit = SubmitField('Регистрация')
 
+
 class LoginForm(FlaskForm):
     email = StringField('Введите почту', validators=[DataRequired()])
     password = PasswordField('Введите пароль', validators=[DataRequired()])
     submit = SubmitField('Вход')
+
 
 class ProfileForm(FlaskForm):
     tokens = StringField('токен', validators=[DataRequired()])
