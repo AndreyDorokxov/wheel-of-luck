@@ -13,39 +13,43 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
 
-alert = Alert("")
-
-
-# функция с донат алертом
-@alert.event()
-def handler(event):
-    if not(VARS.event_codes is None):
-        a1 = event.message
-        a2 = event.amount
-        n = 0
-
-        for i in VARS.event_codes:
-            if str(a1) == str(i):
-                VARS.event_list[n] += float(a2)
-            n += 1
-
 
 @app.route("/")
 def index():
     global alert
     loged()
-    print(alert.token)
     print(VARS.event_list)
     print(VARS.event_codes)
-    print(VARS.token)
     print(VARS.n)
+
     if session["eventer"] is None:
         return render_template("index.html", USER_IN=session["log"],  trues=session["eventer"], none=None)
     else:
+        if VARS.n == 0:
+            alert = Alert(session["token"])
+
+            @alert.event()
+            def handler(event):
+                if not (VARS.event_codes is None):
+                    a1 = event.message
+                    a2 = event.amount
+                    n = 0
+
+                    for i in VARS.event_codes:
+                        if str(a1) == str(i):
+                            VARS.event_list[n] += float(a2)
+                        n += 1
+
+            VARS.n = 1
+
         session["eventer"] = VARS.event_list
         wheel = Wheel(session["eventer"])
+        chance = []
+        for i in wheel.calculate():
+            chance.append(int(i * 100))
+
         return render_template("index.html", USER_IN=session["log"], code=session["codes"], events=wheel.calculate(),
-                               trues=session["eventer"], none=None)
+                               trues=session["eventer"], none=None, chance=chance)
 
 
 @app.route("/quit")
@@ -54,6 +58,9 @@ def quiter():
 
     session.pop("email")
     session["log"] = False
+    session.pop("token")
+    session.pop("eventer")
+    session.pop("codes")
     return redirect("/")
 
 
@@ -124,14 +131,11 @@ def profile():
         form = ProfileForm()
 
         if form.validate_on_submit():
-            VARS.token = form.tokens.data
-            session["token"] = VARS.token
-            session["sum"] = form.sumer.data
+            session["token"] = form.tokens.data
             session["codes"] = [form.codeword1.data,
                                 form.codeword2.data, form.codeword3.data]
             session["eventer"] = [1.0, 1.0, 1.0]
-            global alert
-            alert.token = session["token"]
+            VARS.n = 0
         if session["codes"] is None and session["token"] is None and session["sum"] is None:
             return render_template("profile.html", name=session["email"], form=form,
                                    sum=0, none=None, USER_IN=session["log"])
@@ -151,12 +155,8 @@ def loged():
         session["log"] = log
 
     toker = session.get('token', None)
-    sums = session.get('sum', None)
     codee = session.get('codes', None)
     eventer = session.get('eventer', None)
-
-    if sums is None:
-        session["sum"] = None
 
     if toker is None:
         session["token"] = None
@@ -172,13 +172,7 @@ def loged():
 
     if VARS.n == 0 and not session["eventer"] is None:
         VARS.event_list = session["eventer"]
-        VARS.token = session["token"]
         VARS.event_codes = session["codes"]
-        VARS.n = 1
-        global alert
-        alert.token = session["token"]
-
-
 
 
 if __name__ == "__main__":

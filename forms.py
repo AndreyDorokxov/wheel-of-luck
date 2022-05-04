@@ -16,7 +16,6 @@ class LoginForm(FlaskForm):
 
 class ProfileForm(FlaskForm):
     tokens = StringField('токен', validators=[DataRequired()])
-    sumer =  StringField('сумма', validators=[DataRequired()])
     codeword1 = StringField('ключевое слово 1', validators=[DataRequired()])
     codeword2 = StringField('ключевое слово 2', validators=[DataRequired()])
     codeword3 = StringField('ключевое слово 3', validators=[DataRequired()])
