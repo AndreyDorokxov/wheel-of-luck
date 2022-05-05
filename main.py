@@ -8,6 +8,7 @@ from flask import session
 import datetime
 import VARS
 from donationalerts import Alert
+from waitress import serve
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'y3ferteryukeymmrester'
@@ -182,4 +183,4 @@ def loged():
 
 if __name__ == "__main__":
     db_session.global_init("db/base.db")
-    app.run(port=8080, host='127.0.0.1')
+    serve(app, host='0.0.0.0', port=5000)
